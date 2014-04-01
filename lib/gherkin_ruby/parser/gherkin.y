@@ -3,11 +3,12 @@
 class GherkinRuby::Parser
 
 # Declare tokens produced by the lexer
-token NEWLINE
+token NEWLINE COMMA PERIOD
 token FEATURE BACKGROUND SCENARIO
 token TAG
 token GIVEN WHEN THEN AND BUT
-token TEXT
+token WHILE IF ELSE OTHERWISE
+token TEXT MULTITEXT
 
 rule
 
@@ -70,10 +71,34 @@ rule
 
   Step:
     Keyword TEXT          { result = AST::Step.new(val[1], val[0]); result.pos(filename, lineno) }
+    MultiStep             { result = [val[0]] }
+  ;
+
+  MultiStep:
+    WhileStep             { result = [val[0]] } 
+    IfStep                { result = [val[0]] }
+  ;
+
+  WhileStep:
+    WHILE TEXT COMMA MULTITEXT { 
+       result = AST::MultiStep.new(val[1],val[3], val[0]); 
+       result.pos(filename,lineno) 
+    }
+  ;
+
+  IfStep:
+    IF TEXT THEN MULTITEXT {
+       result = AST::MultiStep.new(val[1],val[3],val[0]);
+       result.pos(filename,lineno)
+    }
   ;
 
   Keyword:
-    GIVEN | WHEN | THEN | AND | BUT
+    GIVEN | WHEN | THEN | AND | BUT 
+  ;
+  
+  MultiKeyword:
+    WHILE | IF | ELSE | OTHERWISE
   ;
 
   Scenarios:

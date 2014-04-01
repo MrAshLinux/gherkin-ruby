@@ -12,7 +12,8 @@ rule
 
   # Literals
   \n                                    { [:NEWLINE, text] }
-
+  ,                                     { [:COMMA, text] }  
+  \.\n                                  { [:PERIOD, text] }
   # Keywords
   Feature:                              { [:FEATURE, text[0..-2]] }
   Background:                           { [:BACKGROUND, text[0..-2]] }
@@ -28,8 +29,17 @@ rule
   And                                   { [:AND, text] }
   But                                   { [:BUT, text] }
 
+  # Multi Step keywords
+  While                                 { [:WHILE, text]}
+  If                                    { [:IF,text]}
+  Else                                  { [:ELSE,text]}
+  Otherwise                             { [:OTHERWISE,text]}
+
   # Text
   [^#\n]*                               { [:TEXT, text.strip] }
+
+  # MultiLine Text 
+  [^#\.\n]*                             { [:MULTITEXT, text.strip] }
 
 inner
   def tokenize(code)

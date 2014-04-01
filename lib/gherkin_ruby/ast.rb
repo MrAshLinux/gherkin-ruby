@@ -79,6 +79,14 @@ module GherkinRuby
       end
     end
 
+    class MultiStep < Node
+      attr_reader :name, :keyword
+      def initialize(pre_text,post_text,keyword)
+	@name = pre_text.to_s
+	@keyword = keyword.to_s
+      end
+    end
+
     class Tag < Node
       attr_reader :name
       def initialize(name)
