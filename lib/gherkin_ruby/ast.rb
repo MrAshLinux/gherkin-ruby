@@ -79,12 +79,18 @@ module GherkinRuby
       end
     end
 
-    class MultiStep < Node
+    class WhileStep < Node
       attr_reader :name, :keyword
       def initialize(pre_text,post_text,keyword)
-	@name = pre_text.to_s
+	@name = pre_text.to_s + ",=>," + post_text.to_s
 	@keyword = keyword.to_s
       end
+      
+      def accept(visitor)
+         name = self.class.name.split('::').last
+         visitor.send("visit_#{name}".to_sym, self)
+      end
+
     end
 
     class Tag < Node
