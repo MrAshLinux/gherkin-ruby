@@ -68,6 +68,12 @@ class GherkinRuby::Parser < Racc::Parser
       when (text = @ss.scan(/\n/))
          action { [:NEWLINE, text] }
 
+      when (text = @ss.scan(/,/))
+         action { [:COMMA, text] }
+
+      when (text = @ss.scan(/\.\n/))
+         action { [:PERIOD, text] }
+
       when (text = @ss.scan(/Feature:/))
          action { [:FEATURE, text[0..-2]] }
 
@@ -95,8 +101,23 @@ class GherkinRuby::Parser < Racc::Parser
       when (text = @ss.scan(/But/))
          action { [:BUT, text] }
 
+      when (text = @ss.scan(/While/))
+         action { [:WHILE, text]}
+
+      when (text = @ss.scan(/If/))
+         action { [:IF,text]}
+
+      when (text = @ss.scan(/Else/))
+         action { [:ELSE,text]}
+
+      when (text = @ss.scan(/Otherwise/))
+         action { [:OTHERWISE,text]}
+
       when (text = @ss.scan(/[^#\n]*/))
          action { [:TEXT, text.strip] }
+
+      when (text = @ss.scan(/[^#\.\n]*/))
+         action { [:MULTITEXT, text.strip] }
 
       else
         text = @ss.string[@ss.pos .. -1]

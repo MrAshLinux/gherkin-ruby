@@ -75,20 +75,12 @@ rule
   ;
 
   MultiStep:
-    WhileStep             { result = [val[0]] } 
-    IfStep                { result = [val[0]] }
-  ;
-
-  WhileStep:
-    WHILE TEXT COMMA MULTITEXT { 
-       result = AST::MultiStep.new(val[1],val[3], val[0]); 
+    WHILE TEXT COMMA TEXT PERIOD NEWLINE{ 
+       result = AST::WhileStep.new(val[1],val[3], val[0]); 
        result.pos(filename,lineno) 
     }
-  ;
-
-  IfStep:
-    IF TEXT THEN MULTITEXT {
-       result = AST::MultiStep.new(val[1],val[3],val[0]);
+    IF TEXT THEN TEXT PERIOD NEWLINE {
+       result = AST::IfThenStep.new(val[1],val[3],val[0]);
        result.pos(filename,lineno)
     }
   ;

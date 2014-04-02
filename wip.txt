@@ -1,0 +1,15 @@
+visitor.rb  (visit each type of Node
+
+      ast     = GherkinRuby.parse(File.read('some.feature')
+      visitor = Spinach::Parser::Visitor.new
+      feature = visitor.visit(ast)
+
+
+    Tree => Feature
+               |_ Background
+               |_ Tags
+               |_ Scenarios
+                    |_Tags
+                    |_Steps
+       
+      
